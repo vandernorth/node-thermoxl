@@ -10,3 +10,6 @@ Starting on 2015-01-24 I will try to create a node application / webserver which
 ## Hardware
 
 * Raspberry Pi Model B+
+
+## License
+Creative Commons Attribution NonCommercial (CC-BY-NC)

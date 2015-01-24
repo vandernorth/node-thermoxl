@@ -1,0 +1,20 @@
+{
+	"name" : "thermoxl",
+	"version" : "0.0.1",
+	"description" : "Raspberry Pi Thermostat",
+	"author" : "Jeffrey van Norden <jeffreyvannorden@gmail.com>",
+	"main" : "./index.js",
+	"repository" : {
+		"type" : "git",
+		"url" : "https://github.com/vandernorth/node-thermoxl.git"
+	},
+	"dependencies" : {
+		"express" 		: "4.x.x",
+		"rpi-gpio" 		: "x.x.x",
+		"node-dht-sensor" 	: "x.x.x",
+		"underscore" 		: "x.x.x",
+		"mongoose" 		: "x.x.x"
+	},
+	"license" : "CC-BY-NC"
+}
+
