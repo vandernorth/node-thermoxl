@@ -10,9 +10,11 @@
 	},
 	"dependencies" : {
 		"express" 		: "4.x.x",
-		"rpi-gpio" 		: "x.x.x",
-		"node-dht-sensor" 	: "x.x.x",
-		"underscore" 		: "x.x.x",
+		"express-dot" 	: "x.x.x",
+		"python-shell" 	: "x.x.x",
+		"shelljs" 		: "x.x.x",
+		"wiring-pi" 	: "x.x.x",
+		"underscore" 	: "x.x.x",
 		"mongoose" 		: "x.x.x"
 	},
 	"license" : "CC-BY-NC"

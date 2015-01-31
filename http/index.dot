@@ -1,0 +1,40 @@
+<div class="topbar">
+	<!-- Left -->
+	<span class="icons">
+		<span class="fa fa-wifi">&nbsp;</span> 
+		<span class="fa fa-fire">&nbsp;</span> 
+		{{?it.p1 && it.p1.lowOrHigh === 1}}
+		<span class="fa fa-sort-desc">&nbsp;</span> 
+		{{??}}
+		<span class="fa fa-sort-asc">&nbsp;</span> 
+		{{?}}
+	</span>
+	
+	<!-- Right -->
+	<span class="pull-right">
+	{{=it.time}} 
+	{{?it.sensorDiff}}<span class="text-warning"> (-{{=it.sensorDiff}}) </span>{{?}}
+	</span>
+</div>
+
+<table>
+	<tr>
+		<td><span class="wi25 wi wi-thermometer">&nbsp;</span></td>
+		<td>{{=it.temperature}}&deg;C </td>
+	</tr>
+	<tr>
+		<td><span class="wi25 wi wi-sprinkles">&nbsp;</span></td>
+		<td>{{=it.humidity}}%</td>
+	</tr>
+	<tr>
+		<td><span class="fa fa-plug">&nbsp;</span></td>
+		<td>{{?it.p1}}{{=it.p1.currentUse}}w{{??}}<span class="fa fa-spin fa-spinner">&nbsp;</span>{{?}}</td>
+	</tr>
+</table>
+
+<div id="setTemperature">
+	<span class="wi wi-thermometer fa-3x">&nbsp;</span><span class="large">{{=it.currentTemperature}}&deg;C</span>
+</div>
+
+<button type="button" class="tempup btn btn-lg btn-primary"><span class="fa fa-chevron-up ">&nbsp;</span></button> <br/><br/>
+<button type="button" class="tempdown btn btn-lg btn-primary"><span class="fa fa-chevron-down ">&nbsp;</span></button>
