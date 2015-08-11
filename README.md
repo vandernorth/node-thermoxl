@@ -1,15 +1,17 @@
 # node-thermoxl
 
 ## Plan
-Starting on 2015-01-24 I will try to create a node application / webserver which can act as a (smart) thermastat on a raspberry pi. 
+The plan has changed (multiple times). The newest plan:
 
-* Easy web interface to show data and control thermostat
-* Control relay via GPIO
-* Read temprature and humidity from sensor via GPIO
+* Two 'apps'
+  * P1 Reader which sends usage to web
+  * Web Api and dashboard where we can see the usage
+* If allowed we should be able to send usage to NEST via nest-api
 
 ## Hardware
 
 * Raspberry Pi Model B+
+* Some virtual server somewhere (could use the Pi as well)
 
 ## License
 Creative Commons Attribution NonCommercial (CC-BY-NC)

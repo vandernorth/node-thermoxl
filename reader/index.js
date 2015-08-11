@@ -1,6 +1,4 @@
 /**
-  * @TODO:
-  * Python script, accept GPIO pin number
   * 
 */
 
