@@ -118,7 +118,7 @@ Poster.prototype.parseMessage = function ( message ) {
         "original":      message
     };
 
-    console.log('Message parsed, ready to post.');
+    //console.log('Message parsed, ready to post.');
 
     this.postMessage(data);
 
