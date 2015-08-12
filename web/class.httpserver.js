@@ -1,0 +1,139 @@
+//== Globals
+var _              = require('lodash'),
+    express        = require("express"),
+    expressSession = require("express-session"),
+    addRequestId   = require("express-request-id")(),
+    connectMongo   = require("connect-mongo"),
+    cookieParser   = require("cookie-parser"),
+    dotEngine      = require("express-dot-engine"),
+    bodyParser     = require("body-parser"),
+    socketio       = require("socket.io"),
+    mongoose       = require("mongoose"),
+    moment         = require("moment"),
+    nodemailer     = require("nodemailer");
+/**
+ *
+ * @param config        {object}
+ * @param config.port   {number}
+ * @constructor
+ */
+var HttpServer     = function HttpServer( config ) {
+
+    this.config  = config;
+    this.express = express();
+
+    this.startServer();
+    this.route();
+    this.set404();
+
+};
+
+HttpServer.prototype.startServer = function () {
+
+    this.express.use(addRequestId);
+    this.express.use(_.bind(this.addRequestLog, this));
+    this.express.set('trust proxy', 'uniquelocal');
+    this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.express.use(bodyParser.json());
+
+    //== Dot View engine
+    this.express.engine('dot', dotEngine.__express);
+    this.express.set('views', __dirname + '/views');
+    this.express.set('view engine', 'dot');
+    this.dotEngine              = dotEngine;
+    this.dotEngine.settings.dot = {
+        evaluate:      /\{\{([\s\S]+?)}}/g,
+        interpolate:   /\{\{=([\s\S]+?)}}/g,
+        encode:        /\{\{!([\s\S]+?)}}/g,
+        use:           /\{\{#([\s\S]+?)}}/g,
+        define:        /\{\{##\s*([\w\.$]+)\s*(:|=)([\s\S]+?)#}}/g,
+        conditional:   /\{\{\?(\?)?\s*([\s\S]*?)\s*}}/g,
+        iterate:       /\{\{~\s*(?:}}|([\s\S]+?)\s*:\s*([\w$]+)\s*(?::\s*([\w$]+))?\s*}})/g,
+        varname:       'layout, partial, locals, it',
+        strip:         false,
+        append:        true,
+        selfcontained: false
+    };
+
+    this.express.set('x-powered-by', false);
+
+    //== Static routes
+    this.express.use('/public', express.static(__dirname + '/public'));
+    this.express.use('/fonts', express.static(__dirname + '/public/fonts'));
+
+    this.enableWebsockets();
+
+    //== Errors
+    this.express.use(function ( error, req, res, next ) {
+        if ( !error ) {next();}
+        self.displayError(req, res, 'Service temporarily unavailable', 'Unable to load the requested page.', {
+            status: 503,
+            error:  error,
+            stack:  error.stack
+        });
+    });
+
+    this.express.set('x-powered-by', false);
+
+    //== Listen
+    this.server.listen(this.config.port);
+
+    console.info('Server ready on port', this.config.port);
+};
+
+HttpServer.prototype.route = function () {
+
+    this.express.get('/', function ( req, res ) {
+        res.end('!');
+    });
+
+    this.express.get('/dashboard', function ( req, res ) {
+        res.end('!');
+    });
+
+    this.express.post('/api/v1/post', function ( req, res ) {
+        console.log('Incoming!', req.ip);
+        console.log('Incoming!', req.body);
+        res.end('{"message":"thanks!"}');
+    });
+
+};
+
+HttpServer.prototype.addRequestLog = function ( req, res, next ) {
+    console.log('[request]', req.method, req.url, req.id);
+    next();
+};
+
+HttpServer.prototype.set404 = function () {
+    this.express.use(function ( req, res ) {
+        console.info('[404] Page not found: ' + req.url);
+        if ( req.url.indexOf('/public') === 0 ) {
+            res.status(404).end('/*404*/');
+        } else {
+            res.status(404).end('/*404*/');
+        }
+    });
+};
+
+HttpServer.prototype.displayError = function ( req, res, title, message, options ) {
+    options = options || {};
+
+    console.error(title, message);
+    res.status(options.status || 500).end(title + '\n' + message);
+
+    /*.render('client-error', {
+     title:   title,
+     message: message,
+     url:     req.url
+     });*/
+};
+
+HttpServer.prototype.enableWebsockets = function () {
+
+    //== Enable web-sockets and sync with express session.
+    this.server = require('http').Server(this.express);
+    this.io     = socketio(this.server);
+};
+
+//== Export
+module.exports = HttpServer;
