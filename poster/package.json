@@ -13,7 +13,7 @@
     "url" : "https://github.com/vandernorth/node-thermoxl.git"
   },
   "dependencies": {
-    "serialport": "*",
+    "serialport": "1.4.*",
     "lodash"    : "*",
     "request"   : "*"
   },
