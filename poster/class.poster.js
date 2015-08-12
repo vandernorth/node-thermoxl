@@ -11,7 +11,11 @@ var _          = require('lodash'),
  * @constructor
  */
 var Poster = function ( config ) {
+
     console.info('Staring Poster');
+
+    var self = this;
+
     this.config     = config;
     this.serialPort = new SerialPort("/dev/ttyUSB0",
         {
@@ -21,7 +25,10 @@ var Poster = function ( config ) {
             "parser":   com.parsers.readline('\r\n', 'ascii')
         });
 
-    this.postMessage = _.throttle(( message ) => this.post(message), this.config.interval);
+    this.postMessage = _.throttle(function ( message ) {
+            self.post(message)
+        }, self.config.interval
+    );
 
     //== Start reading data
     this.start();
@@ -32,17 +39,17 @@ var Poster = function ( config ) {
  */
 Poster.prototype.start = function () {
 
-    console.info('Starting Poster.read()','Will post every', this.config.interval, 'ms');
+    console.info('Starting Poster.read()', 'Will post every', this.config.interval, 'ms');
 
     var self = this;
 
     this.messageBuilder = [];
 
-    this.serialPort.on('open', () => {
+    this.serialPort.on('open', function () {
 
         console.info('Serial port opened');
 
-        self.serialPort.on('data', data => {
+        self.serialPort.on('data', function ( data ) {
 
             //== Add to message
             self.messageBuilder.push(data);
@@ -117,7 +124,7 @@ Poster.prototype.parseMessage = function ( message ) {
  */
 Poster.prototype.post = function ( message ) {
     console.info('Posting message', this.config.url);
-    request.post(this.config.url, { form: message }, ( error, response, body ) => {
+    request.post(this.config.url, { form: message }, function ( error, response, body ) {
         console.info('Post done', error, response, body);
     });
 };
