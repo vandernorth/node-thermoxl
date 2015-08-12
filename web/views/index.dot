@@ -57,13 +57,16 @@ title: Index page
 	<div class="row">
 		<div class="col-md-6">
 			<div class="thermo">
-				usage 1h/2h/6h/12h/24h
+				usage 1h/2h/6h/12h/24h<br>
+					usage 1m/6m/1y<br>
+                			pi hi/lo?<br>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="thermo">
-			usage 1m/6m/1y
-			pi hi/lo?
+				{{?it.p1 && it.p1.original}}
+					{{=it.p1.original.join('<br>')}}
+				{{?}}
 			</div>
 		</div>
 	</div>
