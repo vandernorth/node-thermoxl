@@ -21,36 +21,39 @@ title: Index page
 
 <div class="container">
 	<div class="row">
+	{{?it.p1}}
 		<div class="col-md-3 col-sm-3 col-xs-3">
 			<div class="thermo">
 				<span class="fa fa-plug fa-4x">&nbsp;</span>
 				<br><br>
-				400 watt
+					{{=it.p1.currentUse}} kW
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 col-xs-3">
 			<div class="thermo">
-				<span class="wi wi-thermometer fa-4x">&nbsp;</span>
+				<span class="wi wi-meteor fa-4x">&nbsp;</span>
 				<br><br>
-				25.7&deg;C
+				{{=it.p1.gasUse}}
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 col-xs-3">
 			<div class="thermo">
 				<span class="wi wi-barometer fa-4x">&nbsp;</span>
             	<br><br>
-            	2 bar
+                	{{=it.p1.totalLow}} kWh / {{=it.p1.totalHigh}} kWh
+
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 col-xs-3">
         	<div class="thermo">
         		<span class="wi wi-time-3 fa-4x">&nbsp;</span>
 				<br><br>
-				13:13
+				{{=it.p1.gasTime}}
         	</div>
         </div>
 	</div>
 	<br>
+	{{?}}
 	<div class="row">
 		<div class="col-md-6">
 			<div class="thermo">
