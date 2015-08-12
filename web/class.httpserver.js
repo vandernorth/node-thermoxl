@@ -86,6 +86,8 @@ HttpServer.prototype.startServer = function () {
 
 HttpServer.prototype.route = function () {
 
+    var self = this;
+
     this.express.get('/', function ( req, res ) {
         res.end('!');
     });
