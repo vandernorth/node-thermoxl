@@ -12,8 +12,8 @@ Dashboard.prototype.getDashboardData = function () {
             if ( err || p1 === null ) { reject('Error: ' + (err || 'not found'))}
             else {
                 var dashboardData           = {};
-                dashboardData.p1            = _.extend({}, p1);
-                dashboardData.p1.gasTimeS   = moment(p1.gasTime, 'YYMMDDhhmmss').format('LLL');
+                dashboardData.p1            = p1;
+                dashboardData.p1.gasTime   = moment(p1.gasTime, 'YYMMDDhhmmss').format('LLL');
                 dashboardData.p1.currentUse = Math.ceil(p1.currentUse * 1000) + ' watt';
                 dashboardData.p1.lastUpdate = moment(p1.date).fromNow();
 
