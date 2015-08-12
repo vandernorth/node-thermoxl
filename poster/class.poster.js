@@ -54,7 +54,9 @@ Poster.prototype.start = function () {
         self.serialPort.on('data', function ( data ) {
 
             //== Add to message
-            self.messageBuilder.push(data);
+            if ( self.firstPassOk === true ) {
+                self.messageBuilder.push(data);
+            }
 
             //== End of message
             if ( data == '!' && self.firstPassOk === true ) {
@@ -64,7 +66,7 @@ Poster.prototype.start = function () {
                 //== Reset message
                 self.messageBuilder = [];
 
-            } else if (data == '!') {
+            } else if ( data == '!' ) {
                 console.info('First message ending received. Capture can start.');
                 self.firstPassOk = true;
             }
@@ -113,11 +115,10 @@ Poster.prototype.parseMessage = function ( message ) {
         "gasTime":       parseValueInt(message[16]),
         "gasUse":        parseValueInt(message[17]),
         "gasValve":      parseValueInt(message[18]),
-        "original":      message.join('\n\r')
+        "original":      message
     };
 
-    console.log((new Date()).toString(), '[new_message]');
-    console.dir(data);
+    console.log('Message parsed, ready to post.');
 
     this.postMessage(data);
 
@@ -130,7 +131,7 @@ Poster.prototype.parseMessage = function ( message ) {
 Poster.prototype.post = function ( message ) {
     console.info('Posting message', this.config.url);
     request.post(this.config.url, { form: message }, function ( error, response, body ) {
-        if(error) {
+        if ( error ) {
             console.error('Error while posting', error);
             console.error('body:', body);
         } else {

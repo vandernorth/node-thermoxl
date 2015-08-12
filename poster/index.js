@@ -1,4 +1,4 @@
-require("console-stamp")(console, "HH:MM:ss.l");
+require("console-stamp")(console, "yyyy-mm-dd HH:MM:ss.l");
 
 var Poster = require('./class.poster.js'),
     config = require('./config.js'),
