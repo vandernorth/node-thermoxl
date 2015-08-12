@@ -33,7 +33,7 @@ title: Index page
 			<div class="thermo">
 				<span class="wi wi-meteor fa-4x">&nbsp;</span>
 				<br><br>
-				{{=it.p1.gasUse}}
+				{{=it.p1.gasUse}}m<sup>3</sup>
 			</div>
 		</div>
 		<div class="col-md-3 col-sm-3 col-xs-3">
