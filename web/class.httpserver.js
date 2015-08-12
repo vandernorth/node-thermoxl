@@ -122,7 +122,7 @@ HttpServer.prototype.route = function () {
  */
 HttpServer.prototype.dbConnect = function () {
     var self    = this,
-        options = self.config.database || {};
+        options = {};
 
     console.info('system', 'Trying db connection...');
     mongoose.connect(self.config.database, options, function ( connectError ) {
