@@ -96,7 +96,7 @@ HttpServer.prototype.route = function () {
 
     this.express.post('/api/v1/post', function ( req, res ) {
 
-        var Reading = require("../generic/reader.p1.schema").Reading;
+        var Reading = require("./reader.p1.schema.js").Reading;
         console.log('Incoming!', req.ip);
         console.log('Incoming!', req.ips);
         console.log('Incoming!', req.headers);
