@@ -1,3 +1,4 @@
 module.exports = {
-    "port": 90
+    "port":     90,
+    "database": "mongodb://localhost/smartreadings"
 };

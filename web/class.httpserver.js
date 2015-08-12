@@ -11,17 +11,20 @@ var _              = require('lodash'),
     mongoose       = require("mongoose"),
     moment         = require("moment"),
     nodemailer     = require("nodemailer");
+
 /**
  *
- * @param config        {object}
- * @param config.port   {number}
+ * @param config            {object}
+ * @param config.port       {number}
+ * @param config.database   {number}
  * @constructor
  */
-var HttpServer     = function HttpServer( config ) {
+var HttpServer = function HttpServer( config ) {
 
     this.config  = config;
     this.express = express();
 
+    this.dbConnect();
     this.startServer();
     this.route();
     this.set404();
@@ -30,7 +33,7 @@ var HttpServer     = function HttpServer( config ) {
 
 HttpServer.prototype.startServer = function () {
 
-    this.express.use(addRequestId);
+    //this.express.use(addRequestId);
     this.express.use(_.bind(this.addRequestLog, this));
     this.express.set('trust proxy', 'uniquelocal');
     this.express.use(bodyParser.urlencoded({ extended: true }));
@@ -92,11 +95,50 @@ HttpServer.prototype.route = function () {
     });
 
     this.express.post('/api/v1/post', function ( req, res ) {
+
+        var Reading = require("../generic/reader.p1.schema").Reading;
         console.log('Incoming!', req.ip);
+        console.log('Incoming!', req.ips);
+        console.log('Incoming!', req.headers);
         console.log('Incoming!', req.body);
-        res.end('{"message":"thanks!"}');
+
+        if ( self.isConnected === true ) {
+            var r = new Reading(req.body);
+            r.save(function () {
+                console.info('Reading saved');
+            });
+            res.end('-ok-');
+        }
+        else {
+            console.error('Not connected');
+            res.end('!nok!');
+        }
     });
 
+};
+
+/** Connect to mongodb database based on settings in the config file. Retry every 10s when connection fails
+ * @private
+ */
+HttpServer.prototype.dbConnect = function () {
+    var self    = this,
+        options = self.config.database || {};
+
+    console.info('system', 'Trying db connection...');
+    mongoose.connect(self.config.database, options, function ( connectError ) {
+
+        if ( connectError ) {
+            self.isConnected = false;
+            console.error('system', '[db connect] ERROR connecting to mongodb. ' + connectError + ' Trying again in 10 seconds...');
+            setTimeout(function () {
+                self.dbConnect();
+            }, 10000);
+        }
+        else {
+            console.info('system', '[db connect] Connected to mongodb');
+            self.isConnected = true;
+        }
+    });
 };
 
 HttpServer.prototype.addRequestLog = function ( req, res, next ) {
