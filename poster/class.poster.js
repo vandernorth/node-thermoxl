@@ -45,6 +45,8 @@ Poster.prototype.start = function () {
 
     this.messageBuilder = [];
 
+    this.firstPassOk = false;
+
     this.serialPort.on('open', function () {
 
         console.info('Serial port opened');
@@ -55,13 +57,16 @@ Poster.prototype.start = function () {
             self.messageBuilder.push(data);
 
             //== End of message
-            if ( data == '!' ) {
+            if ( data == '!' && self.firstPassOk === true ) {
 
                 self.parseMessage(self.messageBuilder);
 
                 //== Reset message
                 self.messageBuilder = [];
 
+            } else if (data == '!') {
+                console.info('First message ending received. Capture can start.');
+                self.firstPassOk = true;
             }
         });
     });
@@ -125,7 +130,12 @@ Poster.prototype.parseMessage = function ( message ) {
 Poster.prototype.post = function ( message ) {
     console.info('Posting message', this.config.url);
     request.post(this.config.url, { form: message }, function ( error, response, body ) {
-        console.info('Post done', error, response, body);
+        if(error) {
+            console.error('Error while posting', error);
+            console.error('body:', body);
+        } else {
+            console.info('Post OK', body);
+        }
     });
 };
 
