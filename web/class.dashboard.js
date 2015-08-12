@@ -13,8 +13,8 @@ Dashboard.prototype.getDashboardData = function () {
             else {
                 var dashboardData           = {};
                 dashboardData.p1            = p1;
-                dashboardData.p1.gasTime   = moment(p1.gasTime, 'YYMMDDhhmmss').format('LLL');
-                dashboardData.p1.currentUse = Math.ceil(p1.currentUse * 1000) + ' watt';
+                dashboardData.p1.gasTimeFormat   = moment(p1.gasTime, 'YYMMDDhhmmss').format('LLL');
+                dashboardData.p1.currentUseWatt = Math.ceil(p1.currentUse * 1000) + ' watt';
                 dashboardData.p1.lastUpdate = moment(p1.date).fromNow();
 
                 resolve(dashboardData);
