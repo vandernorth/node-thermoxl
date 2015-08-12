@@ -94,20 +94,11 @@ HttpServer.prototype.route = function () {
 
     this.express.get('/dashboard', function ( req, res ) {
 
-        var Reading = require("./reader.p1.schema.js").Reading;
+        var Dashboard = require('./class.dashboard'),
+            dashboard = new Dashboard(req);
 
-        if ( self.isConnected === true ) {
+        dashboard.render(res);
 
-            Reading.findOne({}, {}, { sort: { 'date': -1 } }, function ( err, post ) {
-                if ( err ) { res.end('Error: ' + err)}
-                else {
-                    res.render('index', { p1: post });
-                    //res.end('Last:'+post);
-                }
-            });
-        } else {
-            res.end('not (yet) connected, cannot read!');
-        }
     });
 
     this.express.post('/api/v1/post', function ( req, res ) {
