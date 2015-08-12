@@ -1,8 +1,8 @@
 ---
 layout: layout.dot
-title: Dashboard
+title: Index page
 ---
-
+{{##section:
 <div class="topbar">
 	<!-- Left -->
 	<span class="icons">
@@ -43,3 +43,4 @@ title: Dashboard
 
 <button type="button" class="tempup btn btn-lg btn-primary"><span class="fa fa-chevron-up ">&nbsp;</span></button> <br/><br/>
 <button type="button" class="tempdown btn btn-lg btn-primary"><span class="fa fa-chevron-down ">&nbsp;</span></button>
+#}}
