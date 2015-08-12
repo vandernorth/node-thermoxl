@@ -2,45 +2,70 @@
 layout: layout.dot
 title: Index page
 ---
-{{##section:
+[[##section:
 <div class="topbar">
 	<!-- Left -->
 	<span class="icons">
-		<span class="fa fa-wifi">&nbsp;</span> 
-		<span class="fa fa-fire">&nbsp;</span> 
+		<span class="fa fa-wifi">&nbsp;</span>
+		<!--span class="fa fa-fire">&nbsp;</span-->
 		{{?it.p1 && it.p1.lowOrHigh === 1}}
-		<span class="fa fa-sort-desc">&nbsp;</span> 
+		<span class="fa fa-sort-desc">&nbsp;</span>
 		{{??}}
-		<span class="fa fa-sort-asc">&nbsp;</span> 
+		<span class="fa fa-sort-asc">&nbsp;</span>
 		{{?}}
 	</span>
-	
+
 	<!-- Right -->
-	<span class="pull-right">
-	{{=it.time}} 
-	{{?it.sensorDiff}}<span class="text-warning"> (-{{=it.sensorDiff}}) </span>{{?}}
-	</span>
+	<span class="pull-right"></span>
 </div>
 
-<table>
-	<tr>
-		<td><span class="wi25 wi wi-thermometer">&nbsp;</span></td>
-		<td>{{=it.temperature}}&deg;C </td>
-	</tr>
-	<tr>
-		<td><span class="wi25 wi wi-sprinkles">&nbsp;</span></td>
-		<td>{{=it.humidity}}%</td>
-	</tr>
-	<tr>
-		<td><span class="fa fa-plug">&nbsp;</span></td>
-		<td>{{?it.p1}}{{=it.p1.currentUse}}w{{??}}<span class="fa fa-spin fa-spinner">&nbsp;</span>{{?}}</td>
-	</tr>
-</table>
+<div class="container">
+	<div class="row">
+		<div class="col-md-3 col-sm-3 col-xs-3">
+			<div class="thermo">
+				<span class="fa fa-plug fa-4x">&nbsp;</span>
+				<br><br>
+				400 watt
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 col-xs-3">
+			<div class="thermo">
+				<span class="wi wi-thermometer fa-4x">&nbsp;</span>
+				<br><br>
+				25.7&deg;C
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 col-xs-3">
+			<div class="thermo">
+				<span class="wi wi-barometer fa-4x">&nbsp;</span>
+            	<br><br>
+            	2 bar
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 col-xs-3">
+        	<div class="thermo">
+        		<span class="wi wi-time-3 fa-4x">&nbsp;</span>
+				<br><br>
+				13:13
+        	</div>
+        </div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="thermo">
+				usage 1h/2h/6h/12h/24h
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="thermo">
+			usage 1m/6m/1y
+			pi hi/lo?
+			</div>
+		</div>
+	</div>
 
-<div id="setTemperature">
-	<span class="wi wi-thermometer fa-3x">&nbsp;</span><span class="large">{{=it.currentTemperature}}&deg;C</span>
+
+
 </div>
-
-<button type="button" class="tempup btn btn-lg btn-primary"><span class="fa fa-chevron-up ">&nbsp;</span></button> <br/><br/>
-<button type="button" class="tempdown btn btn-lg btn-primary"><span class="fa fa-chevron-down ">&nbsp;</span></button>
-#}}
+#]]
