@@ -1,3 +1,8 @@
+---
+layout: layout.dot
+title: Dashboard
+---
+
 <div class="topbar">
 	<!-- Left -->
 	<span class="icons">

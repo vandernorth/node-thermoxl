@@ -93,15 +93,27 @@ HttpServer.prototype.route = function () {
     });
 
     this.express.get('/dashboard', function ( req, res ) {
-        res.end('!');
+
+        var Reading = require("./reader.p1.schema.js").Reading;
+
+        if ( self.isConnected === true ) {
+
+            Reading.findOne({}, {}, { sort: { 'date': -1 } }, function ( err, post ) {
+                if ( err ) { res.end('Error: ' + err)}
+                else {
+                    res.render('index', { p1: post });
+                    //res.end('Last:'+post);
+                }
+            });
+        } else {
+            res.end('not (yet) connected, cannot read!');
+        }
     });
 
     this.express.post('/api/v1/post', function ( req, res ) {
 
         var Reading = require("./reader.p1.schema.js").Reading;
-        console.log('Incoming!', req.ip);
-        console.log('Incoming!', req.ips);
-        console.log('Incoming!', req.headers);
+        console.log('Incoming!', req.header['x-forwarded-for']);
         console.log('Incoming!', req.body);
 
         if ( self.isConnected === true ) {
