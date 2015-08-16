@@ -63,6 +63,10 @@ HttpServer.prototype.startServer = function () {
     //== Static routes
     this.express.use('/public', express.static(__dirname + '/public'));
     this.express.use('/fonts', express.static(__dirname + '/public/fonts'));
+    this.express.use('/bower_components', express.static(__dirname + '/theme/bower_components'));
+    this.express.use('/dist', express.static(__dirname + '/theme/dist'));
+    this.express.use('/js', express.static(__dirname + '/theme/js'));
+    this.express.use('/less', express.static(__dirname + '/theme/less'));
 
     this.enableWebsockets();
 
@@ -98,6 +102,29 @@ HttpServer.prototype.route = function () {
             dashboard = new Dashboard(req);
 
         dashboard.render(res);
+
+    });
+
+    this.express.get('/data/usage', function ( req, res ) {
+
+        var Dashboard = require('./class.dashboard'),
+            dashboard = new Dashboard(req);
+
+        dashboard.usage(res);
+
+    });
+
+    this.express.get('/data/dashboard', function ( req, res ) {
+
+        var Dashboard = require('./class.dashboard'),
+            dashboard = new Dashboard(req);
+
+        dashboard.getDashboardData().then(function ( result ) {
+            res.json(result);
+        })
+            .catch(function ( error ) {
+                res.json({ error: error })
+            });
 
     });
 

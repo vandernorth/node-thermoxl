@@ -1,0 +1,45 @@
+small.change {
+    font-size:12px;
+}
+
+body {
+    background : #333;
+    margin:0;
+    padding:15px;
+    font-family: 'Open Sans', sans-serif;
+}
+.wi25 {
+    font-size:25px;
+}
+.thermo {
+    padding: 5px;
+    padding-top:15px;
+    border : 1px solid #999;
+    background: #fff;
+    text-align:center;
+}
+
+.topbar {
+    height:25px;
+    background:#111;
+    color:white;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    padding:2px;
+    padding-right:5px;
+}
+.topbar .icons {
+    padding-left: 5px;
+}
+
+.info {
+    font-size:1.2em;
+}
+.temperature .icon {
+    font-size:1.5em;
+}
+.large {
+    font-size:2em;
+}
