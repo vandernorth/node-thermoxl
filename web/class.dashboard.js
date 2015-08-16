@@ -100,7 +100,7 @@ Dashboard.prototype.usage = function ( res ) {
         if ( err || p1 === null ) { res.json([]);}
         else {
 
-            var lastHours = moment(p1.date).add(-2, 'hours');
+            var lastHours = moment(p1.date).add(-0.5, 'hours');
 
             Reading
                 .find({ 'date': { '$gte': lastHours.toDate() } })
