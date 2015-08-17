@@ -1,3 +1,7 @@
+function numericString(number){
+    number = number || '';
+        return (number > 0) ? '+' + number : number.toString();
+}
 //== Update main dashboard data
 $(function () {
     setInterval(function () {
@@ -7,15 +11,16 @@ $(function () {
         $.ajax('/data/dashboard').done(function ( data ) {
             console.log('New data', data);
             $('.totalToday').text(data.stats.totalToday);
-            $('.totalDiff').text(data.stats.totalDiff);
+            $('.totalDiff').text(numericString(data.stats.totalDiff));
             $('.gasToday').text(data.stats.gasToday);
-            $('.gasDiff').text(data.stats.gasDiff);
+            $('.gasDiff').text(numericString(data.stats.gasDiff));
 
             $('.currentUse').text(data.p1.currentUseWatt);
             $('.totalLow').text(data.p1.totalLow);
             $('.totalHigh').text(data.p1.totalHigh);
             $('.gasTimeFormat').text(data.p1.gasTimeFormat);
             $('.gasUse').text(data.p1.gasUse);
+            $('.lastUpdate').text(data.p1.lastUpdate);
 
         });
 

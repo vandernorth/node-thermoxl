@@ -124,7 +124,7 @@ title: Dashboard
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-clock-o fa-fw"></i> Last update
-                                    <span class="pull-right text-muted small"><em>{{=it.p1.lastUpdate}}</em>
+                                    <span class="pull-right text-muted small"><em><span class="lastUpdate">{{=it.p1.lastUpdate}}</span></em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
@@ -139,7 +139,7 @@ title: Dashboard
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-bolt fa-fw"></i> Total power <small>(low)</small>
-                                    <span class="pull-right text-muted small"><em><span class="totalHigh">{{=it.p1.totalLow}}</span> kWh</em>
+                                    <span class="pull-right text-muted small"><em><span class="totalLow">{{=it.p1.totalLow}}</span> kWh</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
