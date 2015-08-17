@@ -1,21 +1,25 @@
 //== Update main dashboard data
-$(function(){
-    setInterval(function(){
+$(function () {
+    setInterval(function () {
 
         console.log('Trying to get new data');
 
-        $.ajax('/data/dashboard').done(function(data){
+        $.ajax('/data/dashboard').done(function ( data ) {
             console.log('New data', data);
-            $('.totalToday').text(data.p1.totalToday);
-            $('.totalDiff').text(data.p1.totalDiff);
-            $('.gasToday').text(data.p1.gasToday);
-            $('.gasDiff').text(data.p1.gasDiff);
+            $('.totalToday').text(data.stats.totalToday);
+            $('.totalDiff').text(data.stats.totalDiff);
+            $('.gasToday').text(data.stats.gasToday);
+            $('.gasDiff').text(data.stats.gasDiff);
+
             $('.currentUse').text(data.p1.currentUseWatt);
+            $('.totalLow').text(data.p1.totalLow);
+            $('.totalHigh').text(data.p1.totalHigh);
+            $('.gasTimeFormat').text(data.p1.gasTimeFormat);
+            $('.gasUse').text(data.p1.gasUse);
 
         });
 
-
-    },3000);
+    }, 3000);
 });
 
 //Flot Pie Chart
@@ -36,24 +40,24 @@ $(function () {
     }];
 
     /*var plotObj = $.plot($("#flot-pie-chart"), data, {
-        series:      {
-            pie: {
-                show: true
-            }
-        },
-        grid:        {
-            hoverable: true
-        },
-        tooltip:     true,
-        tooltipOpts: {
-            content:      "%p.0%, %s", // show percentages, rounding to 2 decimal places
-            shifts:       {
-                x: 20,
-                y: 0
-            },
-            defaultTheme: false
-        }
-    });*/
+     series:      {
+     pie: {
+     show: true
+     }
+     },
+     grid:        {
+     hoverable: true
+     },
+     tooltip:     true,
+     tooltipOpts: {
+     content:      "%p.0%, %s", // show percentages, rounding to 2 decimal places
+     shifts:       {
+     x: 20,
+     y: 0
+     },
+     defaultTheme: false
+     }
+     });*/
 
 });
 
@@ -98,11 +102,11 @@ $(function () {
                 position: 'sw'
             },
             grid:            {
-                hoverable: true, //IMPORTANT! this is needed for tooltip to work
+                hoverable:       true, //IMPORTANT! this is needed for tooltip to work
                 borderWidth:     1,
                 minBorderMargin: 20,
                 labelMargin:     10,
-                markings: function ( axes ) {
+                markings:        function ( axes ) {
                     var markings = [];
                     var xaxis    = axes.xaxis;
                     for ( var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2 ) {
@@ -130,7 +134,7 @@ $(function () {
         });
     }
 
-    function reloadUsage(){
+    function reloadUsage() {
         $.ajax('/data/usage').done(function ( data ) {
             doPlot("right", data);
         });

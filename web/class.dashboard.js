@@ -14,6 +14,7 @@ Dashboard.prototype.getDashboardData = function () {
                 var dashboardData               = {};
                 dashboardData.p1                = {};
                 dashboardData.p1.gasTimeFormat  = moment(p1.gasTime, 'YYMMDDhhmmss').fromNow();
+                dashboardData.p1.gasUse         = p1.gasUse;
                 dashboardData.p1.currentUseWatt = Math.ceil(p1.currentUse * 1000) + ' ';
                 dashboardData.p1.lastUpdate     = moment(p1.date).fromNow();
                 dashboardData.p1.totalHigh      = p1.totalHigh;
@@ -71,7 +72,7 @@ Dashboard.prototype.getDashboardData = function () {
                             //dashboardData.yesterday = yesterday;
 
                             if ( yesterday && today ) {
-                                var fix = 2;
+                                var fix                            = 2;
                                 dashboardData.stats.totalToday     = ((today.HMax + today.LMax) - (today.HMin + today.LMin)).toFixed(fix);
                                 dashboardData.stats.totalYesterday = ((yesterday.HMax + yesterday.LMax) - (yesterday.HMin + yesterday.LMin)).toFixed(fix);
                                 dashboardData.stats.totalDiff      = (dashboardData.stats.totalToday - dashboardData.stats.totalYesterday).toFixed(fix);

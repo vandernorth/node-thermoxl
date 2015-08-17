@@ -134,22 +134,22 @@ title: Dashboard
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-bolt fa-fw"></i> Total power <small>(high)</small>
-                                    <span class="pull-right text-muted small"><em>{{=it.p1.totalHigh}} kWh</em>
+                                    <span class="pull-right text-muted small"><em><span class="totalHigh">{{=it.p1.totalHigh}}</span> kWh</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-bolt fa-fw"></i> Total power <small>(low)</small>
-                                    <span class="pull-right text-muted small"><em>{{=it.p1.totalLow}} kWh</em>
+                                    <span class="pull-right text-muted small"><em><span class="totalHigh">{{=it.p1.totalLow}}</span> kWh</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-clock-o fa-fw"></i> Last gas update
-                                    <span class="pull-right text-muted small"><em>{{=it.p1.gasTimeFormat}}</em>
+                                    <span class="pull-right text-muted small"><em><span class="gasTimeFormat">{{=it.p1.gasTimeFormat}}</span></em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="fa fa-cloud fa-fw"></i> Total gas
-                                    <span class="pull-right text-muted small"><em>{{=it.p1.gasUse}} m<sup>3</sup></em>
+                                    <span class="pull-right text-muted small"><em><span class="gasUse">{{=it.p1.gasUse}}</span> m<sup>3</sup></em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item active">
