@@ -1,0 +1,47 @@
+---
+layout: layout.dot
+title: History
+---
+ [[##section:
+ <div id="wrapper">
+
+        <div id="page-wrapper">
+            <div class="row"><br></div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-history"></div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-2">
+
+                    <form id="interval">
+                        <input type="radio" name="interval" value="year">Year<br>
+                        <input type="radio" name="interval" value="month" checked>Month<br>
+                        <input type="radio" name="interval" value="week">Week<br>
+                        <input type="radio" name="interval" value="day">Day<br>
+                        <input type="radio" name="interval" value="hour">Hour<br>
+
+                        <input type="radio" name="interval" value="dow">Day of week<br>
+                        <input type="radio" name="interval" value="hod">Hour of day<br>
+
+                    </form>
+
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+#]]

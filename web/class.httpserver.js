@@ -105,12 +105,25 @@ HttpServer.prototype.route = function () {
 
     });
 
+    this.express.get('/history', function ( req, res ) {
+        res.render('history');
+    });
+
     this.express.get('/data/usage', function ( req, res ) {
 
         var Dashboard = require('./class.dashboard'),
             dashboard = new Dashboard(req);
 
         dashboard.usage(res);
+
+    });
+
+    this.express.get('/data/history', function ( req, res ) {
+
+        var Dashboard = require('./class.dashboard'),
+            dashboard = new Dashboard(req);
+
+        dashboard.getHistory(res);
 
     });
 

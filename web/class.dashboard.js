@@ -136,4 +136,101 @@ Dashboard.prototype.render = function ( res ) {
 
 };
 
-module.exports = Dashboard;
+Dashboard.prototype.getHistory = function ( res ) {
+
+    // start, end, interval[hour,day,week,month,quarter,year, dayofweek, hourofday]
+    var Reading     = require("./reader.p1.schema.js").Reading,
+        aggregateID = {},
+        interval    = this.req.query.interval;
+
+    switch ( interval ) {
+        case'year':
+            aggregateID = { year: { $year: "$date" } };
+            break;
+        case'month':
+            aggregateID = {
+                year:  { $year: "$date" },
+                month: { $month: "$date" }
+            };
+            break;
+        case'week':
+            aggregateID = {
+                year: { $year: "$date" },
+                week: { $week: '$date' }
+            };
+            break;
+        case'day':
+            aggregateID = {
+                year:  { $year: "$date" },
+                month: { $month: "$date" },
+                day:   { $dayOfMonth: "$date" }
+            };
+            break;
+        case'hour':
+            aggregateID = {
+                year:  { $year: "$date" },
+                month: { $month: "$date" },
+                day:   { $dayOfMonth: "$date" },
+                hour:  { $hour: '$date' }
+            };
+            break;
+        case'hourofday':
+            aggregateID = {
+                hour: { $hour: '$date' }
+            };
+            break;
+        case'dayofweek':
+            aggregateID = {
+                day: { $dayOfWeek: '$date' }
+            };
+            break;
+        default:
+            res.json({ error: 'invalid interval ' + interval });
+            return true;
+            break;
+    }
+
+    Reading
+        .aggregate(
+        {
+            $group: {
+                _id:          aggregateID,
+                count:        { $sum: 1 },
+                totalLowMin:  { $min: '$totalLow' },
+                totalLowMax:  { $max: '$totalLow' },
+                totalHighMin: { $min: '$totalHigh' },
+                totalHighMax: { $max: '$totalHigh' },
+                totalGasMin:  { $min: '$gasUse' },
+                totalGasMax:  { $max: '$gasUse' }
+            }
+        })
+        .project({
+            powerUsage: {
+                $subtract: [
+                    { $add: ['$totalLowMax', '$totalHighMax'] },
+                    { $add: ['$totalLowMin', '$totalHighMin'] }
+                ]
+            },
+            gasUsage:   {
+                $subtract: ['$totalGasMax', '$totalGasMin']
+            }
+        })
+        .sort({ _id: 1 })
+        .exec(function ( err, readings ) {
+            if ( err ) {
+                res.json({ error: err });
+            } else {
+                var result = readings.map(function ( item ) {
+
+                    item.powerUsage = item.powerUsage.toFixed(5);
+                    item.gasUsage   = item.gasUsage.toFixed(5);
+
+                    return item;
+
+                });
+                res.json(result);
+            }
+        });
+
+};
+module.exports                 = Dashboard;
