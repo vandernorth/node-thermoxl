@@ -136,13 +136,36 @@ Dashboard.prototype.render = function ( res ) {
 
 };
 
+function objectIdWithTimestamp( timestamp ) {
+    // Convert string date to Date object (otherwise assume timestamp is a date)
+    if ( typeof(timestamp) == 'string' ) {
+        timestamp = new Date(timestamp);
+    }
+
+    // Convert date object to hex seconds since Unix epoch
+    var hexSeconds = Math.floor(timestamp / 1000).toString(16);
+
+    // Create an ObjectId with that hex timestamp
+    return constructedObjectId = require('mongoose').Types.ObjectId(hexSeconds + "0000000000000000");
+
+    //return constructedObjectId
+}
+
 Dashboard.prototype.getHistory = function ( res ) {
 
     // start, end, interval[hour,day,week,month,quarter,year, dayofweek, hourofday]
     var Reading     = require("./reader.p1.schema.js").Reading,
         aggregateID = {},
-        interval    = this.req.query.interval;
+        interval    = this.req.query.interval,
+        startDate   = this.req.query.start;
 
+    if ( startDate ) {
+        //startDate = new Date(startDate);//moment(startDate, 'YYYY-MM-DD').toDate();
+        //console.log('start = ', startDate);
+        startDate = { id: { '$gt': objectIdWithTimestamp(startDate) } };
+    } else {
+        startDate = {};
+    }
     switch ( interval ) {
         case'year':
             aggregateID = { year: { $year: "$date" } };
@@ -174,12 +197,12 @@ Dashboard.prototype.getHistory = function ( res ) {
                 hour:  { $hour: '$date' }
             };
             break;
-        case'hourofday':
+        case 'hod' ://'hourofday':
             aggregateID = {
                 hour: { $hour: '$date' }
             };
             break;
-        case'dayofweek':
+        case 'dow'://'dayofweek':
             aggregateID = {
                 day: { $dayOfWeek: '$date' }
             };
@@ -194,6 +217,7 @@ Dashboard.prototype.getHistory = function ( res ) {
         .aggregate(
         {
             $group: {
+                id:           { $min: '$_id' },
                 _id:          aggregateID,
                 count:        { $sum: 1 },
                 totalLowMin:  { $min: '$totalLow' },
@@ -204,6 +228,7 @@ Dashboard.prototype.getHistory = function ( res ) {
                 totalGasMax:  { $max: '$gasUse' }
             }
         })
+        .match(startDate)
         .project({
             powerUsage: {
                 $subtract: [
@@ -224,6 +249,8 @@ Dashboard.prototype.getHistory = function ( res ) {
 
                     item.powerUsage = item.powerUsage.toFixed(5);
                     item.gasUsage   = item.gasUsage.toFixed(5);
+
+                    //item.date = moment(item.date).utcOffset(-moment(item.date).utcOffset());
 
                     return item;
 

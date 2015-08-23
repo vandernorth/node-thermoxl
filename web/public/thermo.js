@@ -124,7 +124,7 @@ $(function () {
 //Flot Moving Line Chart
 
 $(function () {
-    var graph = $('#flot-history');
+    var graph = $('#flot-history'), dateFormat = '%Y-%m-%d @%h:%M', momentFormat = 'LLL', startDate;
     if ( graph.length > 0 ) {
         console.log('History channel');
 
@@ -132,43 +132,78 @@ $(function () {
             doStuff();
         });
 
+        /*$('#setDate').click(function(event){
+            startDate = $('#start').val();
+            console.log('val',startDate);
+
+            event.stopPropagation();
+            return false;
+        });*/
+
         doStuff();
         function doStuff() {
 
             var interval = $("input[type='radio']:checked").val(),
                 barWidth = 60 * 60 * 1000;
 
+            startDate = $('#start').val();
+
             switch ( interval ) {
                 case'year':
-                    barWidth = 365 * 24 * 60 * 60 * 1000;
+                    barWidth     = 365 * 24 * 60 * 60 * 1000;
+                    dateFormat   = 'Year %Y';
+                    momentFormat = 'YYYY';
                     break;
                 case'month':
-                    barWidth = 30 * 24 * 60 * 60 * 1000;
+                    barWidth     = 31 * 24 * 60 * 60 * 1000;
+                    dateFormat   = '%Y-%b';
+                    momentFormat = 'LL';
                     break;
                 case'week':
-                    barWidth = 7 * 24 * 60 * 60 * 1000;
+                    barWidth     = 7 * 24 * 60 * 60 * 1000;
+                    dateFormat   = '%Y-%b-%d';
+                    momentFormat = 'YYYY - W';
                     break;
                 case'day':
-                    barWidth = 24 * 60 * 60 * 1000;
+                    barWidth   = 24 * 60 * 60 * 1000;
+                    dateFormat = '%Y-%b-%d';
                     break;
                 case'hour':
-                    barWidth = 60 * 60 * 1000;
+                    barWidth     = 60 * 60 * 1000;
+                    dateFormat   = '%Y-%b-%d @%hh';
+                    momentFormat = 'LLL';
                     break;
-                case'hourofday':
-                    barWidth = 60 * 60 * 1000;
+                case'hod':
+                    barWidth     = 60 * 60 * 1000;
+                    dateFormat   = '@%h';
+                    momentFormat = 'H';
                     break;
-                case'dayofweek':
-                    barWidth = 24 * 60 * 60 * 1000;
+                case'dow':
+                    barWidth     = 24 * 60 * 60 * 1000;
+                    dateFormat   = '%a';
+                    momentFormat = 'dddd';
                     break;
             }
 
-            $.ajax('/data/history?interval=' + interval).done(function ( data ) {
+            $.ajax('/data/history?interval=' + interval + '&start=' + startDate).done(function ( data ) {
                 var translatedDataPower = [];
                 var translatedDataGas   = [];
 
                 data.forEach(function ( dp ) {
                     var dt   = dp._id,
-                        date = new Date(dt.year, dt.month || null, dt.day || null, dt.hour || null);
+                        date = new Date(Date.UTC(dt.year, (dt.month ? dt.month - 1 : null), dt.day || 1, dt.hour || null));
+
+                    if ( interval === 'week' ) {
+                        date = moment(dt.year + '-' + dt.week, 'gggg-ww').toDate();
+                    }
+                    else if ( interval === 'hod' ) {
+                        date = new Date(Date.UTC(2015, 1, 1, dt.hour));
+                    }
+                    else if ( interval === 'dow' ) {
+                        date = new Date(Date.UTC(2015, 8, 2 + dt.day));
+                    }
+
+                    console.log('created date', date, dt.month, dt.day);
                     translatedDataPower.push([date, dp.powerUsage]);
                     translatedDataGas.push([date, dp.gasUsage]);
                 });
@@ -188,8 +223,8 @@ $(function () {
                     barWidth:  barWidth,
                     fill:      true,
                     lineWidth: 1,
-                    order:     1,
-                    fillColor: "#AA4643"
+                    order:     1
+                    //fillColor: "#AA4643"
                 }
             }, {
                 data:  dataG,
@@ -199,8 +234,8 @@ $(function () {
                     barWidth:  barWidth,
                     fill:      true,
                     lineWidth: 1,
-                    order:     1,
-                    fillColor: "#AA4643"
+                    order:     2
+                    //fillColor: "#AA4643"
                 }
             }], {
                 series:          {
@@ -221,15 +256,17 @@ $(function () {
                     left:   20
                 },
                 xaxes:           [{
-                    mode: 'time'
+                    mode:          'time',
+                    //tickSize:      barWidth / 1000,
+                    tickFormatter: function ( number ) {
+                        return moment(number).format(momentFormat);
+                    }
                 }],
-                yaxes:           [{
-                    min: 0
-                }, {
-                    // align if we are to the right
-                    alignTicksWithAxis: 1,
-                    position:           "right"
-                }],
+                yaxes:           {
+                    min:                0,
+                    tickDecimals:       2,
+                    alignTicksWithAxis: 0.25
+                },
                 legend:          {
                     position: 'sw'
                 },
@@ -255,8 +292,8 @@ $(function () {
                 },
                 tooltip:         true,
                 tooltipOpts:     {
-                    content:     "%s for %x was %y kW",
-                    xDateFormat: "%Y-%m-%d %h:%M"
+                    content:     "%s for %x was %y kW / m3",
+                    xDateFormat: "[" + dateFormat + "]"
                 }
 
             });
