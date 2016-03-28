@@ -93,7 +93,7 @@ HttpServer.prototype.route = function () {
     var self = this;
 
     this.express.get('/', function ( req, res ) {
-        res.end('!');
+        res.redirect('/dashboard');
     });
 
     this.express.get('/dashboard', function ( req, res ) {

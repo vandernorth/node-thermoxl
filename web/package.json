@@ -1,10 +1,10 @@
 {
   "name"        : "node-thermoxl-web",
-  "version"     : "0.2.1",
+  "version"     : "0.3.1",
   "description" : "Raspberry Pi P1-reader and usage statistics",
   "author"      : "Jeffrey van Norden <jeffreyvannorden@gmail.com>",
   "scripts"     : {
-    "start": "node --harmony index.js"
+    "start": "node index.js"
   },
   "main"        : "index.js",
   "repository"  : {
@@ -24,10 +24,11 @@
     "moment"            : "^2.10",
     "lodash"            : "^3.10",
     "console-stamp"     : "*",
-    "nodemailer"        : "^1.4"
+    "nodemailer"        : "^1.4",
+    "nest-api"          : "*"
   },
   "engines"     : {
-    "node": ">=0.12.2"
+    "node": ">=4.1.2"
   },
   "license"     : "CC-BY-NC"
 }

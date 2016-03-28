@@ -1,8 +1,61 @@
 var moment    = require('moment'),
     _         = require('lodash'),
+    NestApi   = require('nest-api'),
+    config    = require('./config.js').nest || {},
     Dashboard = function Dashboard( req ) {
         this.req = req;
     };
+
+Dashboard.prototype.getNestData = function () {
+    return new Promise(( resolve, reject ) => {
+
+        var nestApi       = new NestApi(config.username, config.password),
+            timedOut      = false,
+            timeOutTimer  = setTimeout(() => {
+                timedOut = true;
+                resolve({
+                    current: 1,
+                    target:  1
+                });
+            }, 7 * 1000);
+        nestApi.userAgent = "VDN-Nest-API";
+        console.log('Trying to get Nest Login');
+        try {
+            nestApi.login(() => {
+                try {
+                    console.log('Trying to get Nest Data');
+                    nestApi.get(data => {
+                        if ( !timedOut ) {
+                            clearTimeout(timeOutTimer);
+                            var shared = data.shared[Object.keys(data.schedule)[0]];
+                            console.log('Nest:  ' + shared.current_temperature + '/' + shared.target_temperature + ' degrees celcius');
+                            resolve({
+                                current: shared.current_temperature.toFixed(1),
+                                target:  shared.target_temperature.toFixed(1)
+                            });
+                        } else {
+                            console.log('TimedOut Nest-Request');
+                        }
+                    });
+                }
+                catch ( e ) {
+                    console.error('Error in Nest API #1');
+                    console.error(e);
+                    console.error(e.stack);
+                    reject(e);
+                }
+
+            });
+        }
+        catch ( e ) {
+            console.error('Error in Nest API #2');
+            console.error(e);
+            console.error(e.stack);
+            reject(e);
+        }
+
+    });
+};
 
 Dashboard.prototype.getDashboardData = function () {
     return new Promise(function ( resolve, reject ) {
@@ -22,7 +75,7 @@ Dashboard.prototype.getDashboardData = function () {
 
                 var checkDate = new Date(moment(p1.date).startOf('day').add(-2, 'days').toDate().valueOf());
 
-                Reading//.find()
+                Reading
                     .aggregate([
                         { $match: { "date": { $gt: checkDate } } },
                         { $sort: { 'date': -1 } },
@@ -65,11 +118,7 @@ Dashboard.prototype.getDashboardData = function () {
                                 '_id': yesterday
                             });
 
-                            //dashboardData.history = agg;
                             dashboardData.stats = {};
-
-                            //dashboardData.today     = today;
-                            //dashboardData.yesterday = yesterday;
 
                             if ( yesterday && today ) {
                                 var fix                            = 2;
@@ -125,12 +174,15 @@ Dashboard.prototype.usage = function ( res ) {
 };
 
 Dashboard.prototype.render = function ( res ) {
-
-    this.getDashboardData()
-        .then(function ( dashboardData ) {
+    Promise.all([this.getDashboardData(), this.getNestData()])
+        .then(function ( allData ) {
+            var dashboardData  = allData[0];
+            dashboardData.nest = allData[1];
             res.render('dashboard', dashboardData);
         })
         .catch(function ( dashboardError ) {
+            console.error(dashboardError);
+            console.error(dashboardError.stack);
             res.end(dashboardError);
         });
 
@@ -215,19 +267,19 @@ Dashboard.prototype.getHistory = function ( res ) {
 
     Reading
         .aggregate(
-        {
-            $group: {
-                id:           { $min: '$_id' },
-                _id:          aggregateID,
-                count:        { $sum: 1 },
-                totalLowMin:  { $min: '$totalLow' },
-                totalLowMax:  { $max: '$totalLow' },
-                totalHighMin: { $min: '$totalHigh' },
-                totalHighMax: { $max: '$totalHigh' },
-                totalGasMin:  { $min: '$gasUse' },
-                totalGasMax:  { $max: '$gasUse' }
-            }
-        })
+            {
+                $group: {
+                    id:           { $min: '$_id' },
+                    _id:          aggregateID,
+                    count:        { $sum: 1 },
+                    totalLowMin:  { $min: '$totalLow' },
+                    totalLowMax:  { $max: '$totalLow' },
+                    totalHighMin: { $min: '$totalHigh' },
+                    totalHighMax: { $max: '$totalHigh' },
+                    totalGasMin:  { $min: '$gasUse' },
+                    totalGasMax:  { $max: '$gasUse' }
+                }
+            })
         .match(startDate)
         .project({
             powerUsage: {
@@ -250,8 +302,6 @@ Dashboard.prototype.getHistory = function ( res ) {
                     item.powerUsage = item.powerUsage.toFixed(5);
                     item.gasUsage   = item.gasUsage.toFixed(5);
 
-                    //item.date = moment(item.date).utcOffset(-moment(item.date).utcOffset());
-
                     return item;
 
                 });
@@ -260,4 +310,5 @@ Dashboard.prototype.getHistory = function ( res ) {
         });
 
 };
-module.exports                 = Dashboard;
+
+module.exports = Dashboard;
