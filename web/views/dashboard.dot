@@ -83,7 +83,7 @@ title: Dashboard
                                     <i class="wi wi-thermometer fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">({{=it.nest.current}}&deg;C <small class="change">({{=it.nest.target}}&deg;C)</small></div>
+                                    <div class="huge">{{=it.nest.current}}&deg;C <small class="change">({{=it.nest.target}}&deg;C)</small></div>
                                     <div>room temperature</div>
                                 </div>
                             </div>
@@ -157,12 +157,12 @@ title: Dashboard
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="wi wi-thermometer-exterior fa-fw"></i> Temperature
-                                    <span class="pull-right text-muted small"><em>26&deg;C</em>
+                                    <span class="pull-right text-muted small"><em>{{=it.nest.current}}&deg;C</em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <i class="wi wi-thermometer-internal fa-fw"></i> Desired
-                                    <span class="pull-right text-muted small"><em>18&deg;C</em>
+                                    <span class="pull-right text-muted small"><em>{{=it.nest.target}}&deg;C</em>
                                     </span>
                                 </a>
                             </div>
@@ -174,38 +174,6 @@ title: Dashboard
                 <!-- /.col-lg-4 -->
             </div>
             <!-- /.row -->
-
-
-
-
-            <!--
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Pie Chart Example
-                        </div>
-                        <div class="panel-body">
-                            <div class="flot-chart">
-                                <div class="flot-chart-content" id="flot-pie-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            -->
-
-
-
-
-
-
-
-
-
-
-
 
 
 
