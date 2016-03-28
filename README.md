@@ -13,5 +13,11 @@ The plan has changed (multiple times). The newest plan:
 * Raspberry Pi Model B+
 * Some virtual server somewhere (could use the Pi as well)
 
+## Screenshots
+Dashboard view:
+![Dashboard](https://github.com/vandernorth/node-thermoxl/blob/master/screenshots/dashboard.png?raw=true)
+History view:
+![History](https://github.com/vandernorth/node-thermoxl/blob/master/screenshots/history.png?raw=true)
+
 ## License
 Creative Commons Attribution NonCommercial (CC-BY-NC)
